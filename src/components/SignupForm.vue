@@ -40,6 +40,9 @@
 </template>
 
 <script>
+
+// Challenge:
+// when a user clicks on a skill, delete that skill
 export default {
     data() {
         return {
@@ -55,7 +58,8 @@ export default {
     methods: {
         addSkill(e) {
             // when a user presses a comma (and must be preceded by a value that comes before the , (can't just be empty value))
-            if (e.key === ',' && this.tempSkill) {
+            // **bc alt didn't work, changed to if user presses 'enter', which is keyCode 13 after each.
+            if (e.keyCode === 13 && this.tempSkill) {
                 // we don't want any duplicates!
                 if (!this.skills.includes(this.tempSkill)) {
                     // add what's in input field into skills array
@@ -102,5 +106,18 @@ export default {
         margin: 0 10px 0 0;
         position: relative;
         top: 2px;
+    }
+    .pill {
+        display: inline-block;
+        margin: 20px 10px 0 0;
+        padding: 6px 12px;
+        background: #eee;
+        border-radius: 20px;
+        font-size: 12px;
+        letter-spacing: 1px; 
+        font-weight: bold;
+        color: #777;
+        cursor: pointer;
+
     }
 </style>
