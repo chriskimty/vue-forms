@@ -14,32 +14,29 @@
             <option value="designer">Web Designer</option>
         </select>
 
+        <label>Skills:</label>
+        <!-- @keyup listens for everytime a user clicks on a certain key and lifts it up -->
+        <!-- in tutorial, added @keyup.alt, but doesn't work on mac -->
+        <input type="text" v-model="tempSkill" @keyup="addSkill">
+        <!-- cycling through input field  -->
+        <!-- unique key -->
+        <div v-for="skill in skills" :key="skill" class="pill">
+            {{ skill }}
+        </div>
+
         <!-- two ways of creating a checkbox -->
         <div class="terms">
             <input type="checkbox" v-model="terms" required>
             <label>Accept terms and conditions</label>
         </div>
 
-        <!-- another type of checkbox - we use an array and not boolean (array to contain the ones we checked) -->
-        <!-- <div>
-            <input type="checkbox" value="chris" v-model="names">
-            <label>Chris</label>
-        </div>
-        <div>
-            <input type="checkbox" value="sang" v-model="names">
-            <label>Sang</label>
-        </div>
-        <div>
-            <input type="checkbox" value="chabs" v-model="names">
-            <label>Chabs</label>
-        </div> -->
+        <!-- another type of checkbox - can use an array and not boolean (array to contain the ones we checked) - see previous commit history-->
     </form>
     <!-- to see if we are actually tracking -->
     <p>Email: {{ email  }}</p>
     <p>Password: {{ password  }}</p>
     <p>Role: {{ role  }}</p>
     <p>Terms accepted: {{ terms }}</p>
-    <!-- <p>Names: {{ names }}</p> -->
 </template>
 
 <script>
@@ -50,8 +47,23 @@ export default {
             email: '',
             password: '',
             role: 'designer',
-            terms: false
-            // names: []
+            terms: false,
+            tempSkill: '',
+            skills: []
+        }
+    },
+    methods: {
+        addSkill(e) {
+            // when a user presses a comma (and must be preceded by a value that comes before the , (can't just be empty value))
+            if (e.key === ',' && this.tempSkill) {
+                // we don't want any duplicates!
+                if (!this.skills.includes(this.tempSkill)) {
+                    // add what's in input field into skills array
+                this.skills.push(this.tempSkill)
+                }
+                // clear the input field to add new 
+                this.tempSkill = ''
+            }
         }
     }
 }
