@@ -1,5 +1,5 @@
 <template>
-    <form>
+    <form @submit.prevent="handleSubmit">
         <label>Email</label>
         <input type="email" required v-model="email">
         <!-- ^2-way data binding - technically 'email' could be called anything-->
@@ -7,6 +7,7 @@
 
         <label>Password</label>
         <input type="password" required v-model="password">
+        <div v-if="passwordError" class="error"> {{ passwordError }}</div>
 
         <label>Role: </label>
         <select v-model="role">
@@ -21,7 +22,9 @@
         <!-- cycling through input field  -->
         <!-- unique key -->
         <div v-for="skill in skills" :key="skill" class="pill">
-            {{ skill }}
+            <!-- attach a click event -->
+            <!-- pass the 'skill' as an argument -->
+            <span @click="removeSkill(skill)">{{ skill }}</span>
         </div>
 
         <!-- two ways of creating a checkbox -->
@@ -31,11 +34,15 @@
         </div>
 
         <!-- another type of checkbox - can use an array and not boolean (array to contain the ones we checked) - see previous commit history-->
+
+        <div class="submit">
+            <button>Create an Account</button>
+        </div>
     </form>
     <!-- to see if we are actually tracking -->
-    <p>Email: {{ email  }}</p>
-    <p>Password: {{ password  }}</p>
-    <p>Role: {{ role  }}</p>
+    <p>Email: {{ email }}</p>
+    <p>Password: {{ password }}</p>
+    <p>Role: {{ role }}</p>
     <p>Terms accepted: {{ terms }}</p>
 </template>
 
@@ -52,7 +59,8 @@ export default {
             role: 'designer',
             terms: false,
             tempSkill: '',
-            skills: []
+            skills: [],
+            passwordError: ''
         }
     },
     methods: {
@@ -67,6 +75,26 @@ export default {
                 }
                 // clear the input field to add new 
                 this.tempSkill = ''
+            }
+        },
+        removeSkill(skill) {
+            this.skills = this.skills.filter((item) => {
+                // if the skill we clicked on and passed into the arg is equal, since we're returning false for that item, it filters it out of the item (i.e. removes it)
+                return skill !== item
+            })
+        },
+        handleSubmit() {
+            //  validate password to ensure it's over 5 characters. otherwise throw an error
+            this.passwordError = this.password.length > 5
+                ? ''
+                : 'Password must be at least 6 characters long'
+            // if there is no error, log out all values into the console
+            if (!this.passwordError) {
+                console.log('email:', this.email)
+                console.log('password:', this.password)
+                console.log('role:', this.role)
+                console.log('skills:', this.skills)
+                console.log('terms accepted:', this.terms)
             }
         }
     }
@@ -118,6 +146,23 @@ export default {
         font-weight: bold;
         color: #777;
         cursor: pointer;
-
+    }
+    button {
+        background: #0b6dff;
+        border: 0;
+        padding: 10px 20px; 
+        margin-top: 20px;
+        color: white;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+    .submit {
+        text-align: center;
+    }
+    .error {
+        color: #ff0062;
+        margin-top: 10px;
+        font-size: 0.8em;
+        font-weight: bold;
     }
 </style>
